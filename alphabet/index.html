@@ -1,0 +1,158 @@
+<!doctype html>
+<head>
+  <meta charset="utf-8">
+  <title>My App</title>
+  <meta name="description" content="My Parse App">
+  <meta name="viewport" content="width=device-width">
+<!--   <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/styles.css"> -->  
+<!-- <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script> -->
+  <script type="text/javascript" src="http://code.jquery.com/jquery-2.1.4.min.js"></script> 
+
+<!--   <script type="text/javascript" src="http://www.parsecdn.com/js/parse-1.4.2.min.js"></script> -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css"> 
+  <link rel="stylesheet" href="css/css.css">
+  <script src="http://d3js.org/d3.v3.min.js"  charset="utf-8"></script>
+  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js" charset="utf-8"></script> -->
+ </head>
+<body>
+    <!-- <div Id="RU_alphabet"  style="position:relative; width:900px; height:600px; margin-left: auto; margin-right: auto; border:2px solid blue"> -->
+    <div Id="RU_alphabet"  style="position:relative; width:900px; height:600px; margin-left: auto; margin-right: auto">
+      
+    </div>
+    <script> 
+     $(function(){
+        var i;
+        var leftshift=0;    //³æ¦r¥d
+        var lleftshift=50;  //µo­µ¥d
+        var topPosi=250;           
+        var cardHeight= parseInt(383 * 0.8) ;  //³æ¦r¥d
+        var cardWidth = parseInt(312 * 0.8) ;  //³æ¦r¥d
+        var lCardHeight= 600 ;  //µo­µ¥d
+        var lCardWidth = 800 ;  //µo­µ¥d      
+        var ncard = 33;
+        var overlap = 20;
+        var upercent=0.8;
+        var larray =[] ;  
+        var lobj={};        
+        var letter = "" ;
+        var xposi = 0;
+        for	(i = 0; i < ncard ; i++) {              
+            xposi= leftshift+i*overlap;    
+            larray[i]=xposi;
+        };
+        
+        var div = d3.select("div");           
+        var imgAll = div.selectAll("img")
+        imgAll.data(larray)         
+        .enter().append("img")
+        .attr("id", function(d, i) { return  "img" + (i+1) ; }) 
+        .attr("height",cardHeight)
+        .attr("width",cardWidth)
+        .attr("top",topPosi)
+        .attr("src",function(d, i) { return "png\\" + (i+1) + ".png" ; })   
+        .style("position","absolute") 
+        .style("z-index",function(d, i) { return ncard - i ; })
+        .style("top",topPosi+"px")
+        .style("left",function(d) { return d + "px" });
+        
+       
+        for (i=1 ; i <= ncard ; i++) { 
+         var sel="#img"+i.toString();           
+         $( sel ).hover(
+          function() {
+            var yo=parseInt($(this).attr("top"));                
+            var yh=parseInt($(this).attr("height"));
+            var sty=$(this).attr("style");
+            var newtop =parseInt(yo - yh * upercent);
+            var orgStr="top: " + yo +"px";
+            var rplStr="top: " + newtop + "px" ;
+            var newsty=sty.replace(orgStr,rplStr);
+            $(this).attr("top",newtop );
+            $(this).attr("style",newsty);
+          }, function() {
+            var yo=parseInt($(this).attr("top"));
+            var yh=parseInt($(this).attr("height"));
+            var sty=$(this).attr("style");
+            //var newtop =parseInt(yo + yh * upercent);
+            var newtop = topPosi ;
+            var orgStr="top: " + yo +"px";
+            var rplStr="top: " + newtop + "px" ;
+            var newsty=sty.replace(orgStr,rplStr);
+            $(this).attr("top",newtop);
+            $(this).attr("style",newsty);
+          }
+         );                   
+        }; 
+        
+        for (i=1 ; i <= ncard ; i++) { 
+         var sel="#img"+i.toString();           
+         $( sel ).click(
+          function() {       
+            var psel="p"+$(this).attr("Id");
+            
+            div.append("img")
+            .attr("id", psel) 
+            .attr("height",lCardHeight)
+            .attr("width",lCardWidth)
+            .attr("src","png\\p" + $(this).attr("Id").substr(3) + ".png")   
+            .style("position","absolute")
+            .style("z-index",100)
+            .style("top",leftshift+"px")
+            .style("left",leftshift+lleftshift+"px");
+          
+            div.append("img")
+            .attr("id", "btn_sound")
+            .attr("height",40)
+            .attr("width",117)
+            .attr("src","png\\button_sound.png")   
+            .style("position","absolute")
+            .style("z-index",150)
+            .style("top",leftshift+150+"px")
+            .style("left",leftshift+lleftshift+585+"px");            
+            
+            div.append("img")
+            .attr("id", "btn_done")
+            .attr("height",39)
+            .attr("width",164)
+            .attr("src","png\\button_done.png")   
+            .style("position","absolute")
+            .style("z-index",150)
+            .style("top",leftshift+510+"px")
+            .style("left",leftshift+lleftshift+580+"px");    
+
+            div.append("audio")
+            .attr("id", "mp3")
+            .attr("src","sound\\" + $(this).attr("Id").substr(3) + ".mp3");  
+            
+            $("#btn_sound").click(  
+              function() {  
+              var aid = document.getElementById("mp3"); 
+              aid.play();
+              //$("#mp3").play();
+            });                   
+            
+            $("#btn_done").click(  
+              function() {
+                $(this).remove(); 
+                $("#btn_sound").remove();
+                $("#mp3").remove();
+                $("#"+psel).remove();                     
+                for (j=1 ; j <= ncard ; j++) { 
+                  var selh="#img"+j.toString();
+                  $(selh).show();
+                };  
+            });                              
+            for (j=1 ; j <= ncard ; j++) { 
+              var selh="#img"+j.toString();
+              $(selh).hide();
+            };                         
+         });
+         
+        };     
+
+     });
+    </script>
+  
+</body>
+</html>

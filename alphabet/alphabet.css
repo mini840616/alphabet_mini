@@ -1,0 +1,50 @@
+body{
+	background-image : url("http://subtlepatterns.com/patterns/ricepaper.png");
+}	
+
+
+
+.nav{
+	background-image: url("http://i.imgur.com/GFWdX1a.png");
+	background-size: 100%;
+	height: 70px;
+}
+.logo{
+	margin-top:15px; 
+}
+.nav-btn{
+	height: 70px;
+	float: right;
+}
+.footer{
+	
+	background-image: url("http://i.imgur.com/GFWdX1a.png");
+	background-size: 100%;
+	height: 30px;
+}
+.foot-btn{
+	position:absolute;
+	right: 0px; 
+}
+
+#RU_alphabet{
+    
+    position:relative; 
+
+    margin-left:center; 
+    margin-right:center;
+    
+}   
+
+.row{
+
+	width:1200px;
+	height:800px;
+
+} 
+
+.wawaimg{
+	
+	margin-top:180px;
+	margin-left:150px;
+}
